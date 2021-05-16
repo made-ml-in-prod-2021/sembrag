@@ -1,3 +1,5 @@
+from math import ceil
+
 import pytest
 import numpy as np
 import pandas as pd
@@ -8,6 +10,7 @@ from src.config.data_config import DataFileParams, SplittingParams
 
 TEST_DATA_SHAPE = (1000, 15)
 CSV_SEP = ';'
+TEST_SIZE = 0.2785
 
 
 @pytest.fixture
@@ -39,4 +42,21 @@ def test_load_data_from_csv(tmpdir, raw_data: pd.DataFrame):
     assert all(raw_data.columns == data_from_csv.columns), (
         f'Expected columns {raw_data.columns} \n but got columns {data_from_csv.columns}'
     )
-    assert all(raw_data == data_from_csv), (f'Expected \n {raw_datadata} \n but got \n {data_from_csv}')
+    assert all(raw_data == data_from_csv), (
+        f'Expected \n {raw_datadata} \n but got \n {data_from_csv}')
+
+
+def test_split_test_train(raw_data: pd.DataFrame):
+    split_params = SplittingParams(test_size=TEST_SIZE)
+    train, test = split_test_train(raw_data, split_params)
+    expected_test_size = ceil(TEST_SIZE * raw_data.shape[0])
+    expected_train_size = raw_data.shape[0] - expected_test_size
+    assert type(test) == type(train) == pd.DataFrame, (
+        f'Expected pd.DataFrame type returned by function, but got for test {type(test)}, for train {type(train)}'
+    )
+    assert test.shape[0] == expected_test_size, (
+        f'Expected size of test: {expected_test_size} rows, but got {test.shape[0]} rows'
+    )
+    assert train.shape[0] == expected_train_size, (
+        f'Expected size of test: {expected_train_size} rows, but got {train.shape[0]} rows'
+    )
