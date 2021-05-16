@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 @dataclass()
 class DataFileParams:
     path : str
-    sep : str = field(default=';')
+    sep : str = field(default=',')
 
 
 @dataclass()
