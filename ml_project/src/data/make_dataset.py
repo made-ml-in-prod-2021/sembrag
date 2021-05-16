@@ -9,7 +9,6 @@ from src.config.data_config import DataFileParams, SplittingParams
 def load_data_from_csv(params: DataFileParams) -> pd.DataFrame:
     """Function loading data from csv-file. """
     data = pd.read_csv(params.path, sep=params.sep)
-    data.dropna(inplace=True)
     return data
 
 
