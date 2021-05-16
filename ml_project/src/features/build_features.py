@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -11,7 +13,7 @@ from src.config.feature_config import FeatureParams
 def get_target(data: pd.DataFrame, params: FeatureParams) -> Tuple[pd.Series, pd.DataFrame]:
     """Function gets target from DataFrame and drops it from data. """
     target = data[params.target_col]
-    data.drop(params.target_col)
+    data = data.drop(params.target_col, axis=1)
     return target, data
 
 
@@ -44,12 +46,18 @@ def build_transformer(params: FeatureParams) -> ColumnTransformer:
     ]
     if len(params.categorical_features) > 0:
         transformers_list.append(
-            ('categorial', build_cat_pipeline(params), params.categorical_features))
+            ('categorical', build_cat_pipeline(params), params.categorical_features))
     transformer = ColumnTransformer(transformers_list)
+    return transformer
 
 
 def process_features(data: pd.DataFrame, transformer: ColumnTransformer,
                      params: FeatureParams) -> pd.DataFrame:
     """Function that processes data with transformer. """
-    transformed_data = pd.DataFrame(transformer.transform())
+    print(type(transformer.transform(data)))
+    print(transformer.transform(data))
+    transformed_data = pd.DataFrame(transformer.transform(data).to_array())
     return transformed_data
+
+
+#def drop_features(data: pd.)

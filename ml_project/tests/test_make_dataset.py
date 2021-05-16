@@ -10,7 +10,7 @@ from src.config.data_config import DataFileParams, SplittingParams
 
 TEST_DATA_SHAPE = (1000, 15)
 CSV_SEP = ';'
-TEST_SIZE = 0.2785
+TEST_SIZE = 0.25
 
 
 @pytest.fixture
