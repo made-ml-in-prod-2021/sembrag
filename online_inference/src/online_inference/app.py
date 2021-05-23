@@ -27,7 +27,8 @@ def main():
 @app.on_event('startup')
 def load_model():
     global model
-    model_path = os.getenv('PATH_TO_MODEL', '..\\..\\model\\clf_hw2.pkl')
+    default_path_to_model = os.path.join('..', '..', 'model', 'clf_hw2.pkl')
+    model_path = os.getenv('PATH_TO_MODEL', default_path_to_model)
     if model_path is None:
         err = f'PATH_TO_MODEL {model_path} is None'
         logger.error(err)
