@@ -9,9 +9,10 @@ if __name__ == '__main__':
     features = test_data.columns.to_list()
     indexes = test_data.index.to_list()
     request_data = test_data.values.tolist()
-    response = requests.get(
-        'http://127.0.0.1:8000/predict/',
-        json={'data': request_data, 'features': features, 'indexes': indexes},
-    )
-    print(response.status_code)
-    print(response.json())
+    for idxs, req_data in zip(indexes, request_data):
+        response = requests.get(
+            'http://127.0.0.1:8000/predict/',
+            json={'data': [req_data], 'features': features, 'indexes': [idxs]},
+        )
+        print(response.status_code)
+        print(response.json())
