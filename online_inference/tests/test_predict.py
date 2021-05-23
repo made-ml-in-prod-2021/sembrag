@@ -13,7 +13,7 @@ from src.online_inference.app import app, app_name
 @pytest.fixture(autouse=True)
 def mock_settings_env_vars():
     default_path_to_model = os.path.join('online_inference', 'model', 'clf_hw2.pkl')
-    with mock.patch.dict(os.environ, {"PATH_TO_MODEL": default_path_to_model}):
+    with mock.patch.dict(os.environ, {'PATH_TO_MODEL': default_path_to_model}):
         yield
 
 
