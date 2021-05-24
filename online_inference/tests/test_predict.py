@@ -47,10 +47,23 @@ def test_predict_end_point():
             json={'data': request_data, 'features': features, 'indexes': indexes},
         )
         predicts = response.json()
-        assert response.status_code == 200
-        assert type(response.json()) == list
-        assert all(['idx' in predict for predict in predicts])
-        assert all(['class_pred' in predict for predict in predicts])
-        assert all([0 <= predict['class_pred'] <= 1 for predict in predicts])
+        assert response.status_code == 200, (
+            f'Received {response.status_code} code instead of 200'
+        )
+        assert type(response.json()) == list, (
+            f'Predict answer has type {type(response.json())} instead of list'
+        )
+        assert len(request_data) == len(response.json()), (
+            f'Recieved {len(response.json())} predicts, expected {len(request_data)}'
+        )
+        assert all(['idx' in predict for predict in predicts]), (
+            f'Not all predicts has index'
+        )
+        assert all(['class_pred' in predict for predict in predicts]), (
+            f'Not all predicns has predicted class'
+        )
+        assert all([predict['class_pred'] in (0, 1) for predict in predicts]), (
+            f'Not all predicted classes are 0 or 1'
+        )
 
 

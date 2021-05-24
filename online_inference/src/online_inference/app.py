@@ -48,7 +48,7 @@ def predict(request: Data):
     print(preds)
     return preds
 
-@app.get('/test/', response_model=ModelOut)
+@app.get('/echo_test/', response_model=ModelOut)
 def test(request: ModelOut):
     print(request)
     return request
