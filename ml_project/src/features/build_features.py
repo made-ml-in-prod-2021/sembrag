@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 import numpy as np
 import pandas as pd
@@ -33,7 +33,7 @@ def build_cat_pipeline(params: FeatureParams) -> Pipeline:
     cat_pipeline = Pipeline(
         [
             ('imputer', SimpleImputer(missing_values=np.nan, strategy=params.cat_impute_strategy)),
-            ('OHE', OneHotEncoder()),
+            ('OHE', OneHotEncoder(sparse=False)),
         ]
     )
     return cat_pipeline
@@ -54,10 +54,10 @@ def build_transformer(params: FeatureParams) -> ColumnTransformer:
 def process_features(data: pd.DataFrame, transformer: ColumnTransformer,
                      params: FeatureParams) -> pd.DataFrame:
     """Function that processes data with transformer. """
-    print(type(transformer.transform(data)))
-    print(transformer.transform(data))
-    transformed_data = pd.DataFrame(transformer.transform(data).to_array())
+    transformed_data = pd.DataFrame(transformer.transform(data))
     return transformed_data
 
 
-#def drop_features(data: pd.)
+def drop_features(data: pd.DataFrame, features_to_drop: List[str]) -> pd.DataFrame:
+    """Function to drop features from DataFrame. """
+    return data.drop(features_to_drop, axis=1)

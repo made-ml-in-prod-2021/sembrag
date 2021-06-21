@@ -6,8 +6,9 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
 from src.features.build_features import build_cat_pipeline, build_num_pipeline, build_transformer, \
-    get_target, process_features
+    get_target, process_features, drop_features
 from src.config.feature_config import FeatureParams
+
 
 TEST_DATA_SHAPE = (1000, 6)
 TEST_DATA_CAT_COL_QTY = 4
@@ -125,7 +126,7 @@ def test_build_cat_pipeline(raw_cat_data: pd.DataFrame):
     cat_columns = list(raw_cat_data.columns)
     start_cat_col = TEST_DATA_SHAPE[1] - TEST_DATA_CAT_COL_QTY
     num_columns = cat_columns[:start_cat_col]
-    cat_columns = cat_columns[start_cat_col : -1]
+    cat_columns = cat_columns[start_cat_col: -1]
     target_name = cat_columns[-1]
     params = FeatureParams(numerical_features=num_columns, target_col=target_name,
                            categorical_features=cat_columns)
@@ -166,11 +167,14 @@ def test_build_transformer_only_numerical(raw_cat_data: pd.DataFrame):
 
 
 def test_process_features(raw_cat_data: pd.DataFrame):
-    cat_columns = list(raw_cat_data.columns)
+    all_columns = list(raw_cat_data.columns)
     start_cat_col = TEST_DATA_SHAPE[1] - TEST_DATA_CAT_COL_QTY
-    num_columns = cat_columns[:start_cat_col]
-    cat_columns = cat_columns[start_cat_col: -1]
-    target_name = cat_columns[-1]
+    num_columns = all_columns[:start_cat_col]
+    cat_columns = all_columns[start_cat_col: -1]
+    target_name = all_columns[-1]
+    diversity_of_cat_data = [len(set(raw_cat_data[col])) for col in cat_columns]
+    expected_columns_qty_for_ohe = sum(diversity_of_cat_data) + len(num_columns)
+    expected_transformed_shape = (raw_cat_data.shape[0], expected_columns_qty_for_ohe)
     params = FeatureParams(numerical_features=num_columns, target_col=target_name,
                            categorical_features=cat_columns)
     transformer = build_transformer(params)
@@ -179,8 +183,19 @@ def test_process_features(raw_cat_data: pd.DataFrame):
     assert type(transformed_data) == pd.DataFrame, (
         f'Expected Pandas Dataframe type but got {type(transformed_data)}'
     )
-    print(type(transformed_data))
-    print(transformed_data)
-    assert transformed_data.shape == raw_cat_data.shape, (
-        f'Expected shape {raw_cat_data.shape} of data, but got {transformed_data.shape}'
+    assert transformed_data.shape == expected_transformed_shape, (
+        f'Expected shape {expected_transformed_shape} of data, but got {transformed_data.shape}'
+    )
+
+
+def test_drop_features(raw_cat_data: pd.DataFrame):
+    all_columns = list(raw_cat_data.columns)
+    start_cat_col = TEST_DATA_SHAPE[1] - TEST_DATA_CAT_COL_QTY
+    cat_columns = all_columns[start_cat_col: -1]
+    column_to_drop = cat_columns[:TEST_DATA_CAT_COL_QTY // 2]
+    cleaned_data = drop_features(raw_cat_data, column_to_drop)
+    expected_cleaned_data_shape = (
+        raw_cat_data.shape[0], raw_cat_data.shape[1] - len(column_to_drop))
+    assert cleaned_data.shape == expected_cleaned_data_shape, (
+        f'Expected {expected_cleaned_data_shape} shape of cleaned data, but got {cleaned_data.shape}'
     )
