@@ -10,8 +10,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 from src.features.build_features import build_cat_pipeline, build_num_pipeline, build_transformer, \
     get_target, process_features, drop_features
-from src.models.train_model import train_model, create_model_pipeline, predict_model, model_score, \
-    export_model
+from src.models.train_model import train_model, create_model_pipeline, export_model
+from src.models.predict_model import predict_model, model_score
 from src.data.make_dataset import split_test_train
 from src.config.feature_config import FeatureParams
 from src.config.model_config import ModelParams

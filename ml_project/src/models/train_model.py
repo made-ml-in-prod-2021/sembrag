@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Union
 
 import joblib
 import numpy as np
@@ -6,7 +6,6 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import roc_auc_score, f1_score
 from sklearn.pipeline import Pipeline
 
 from src.config.model_config import ModelParams
@@ -34,21 +33,8 @@ def create_model_pipeline(
     return Pipeline([('feature_part', transformer), ('model_part', model)])
 
 
-def predict_model(model: Pipeline, features: pd.DataFrame) -> np.ndarray:
-    """Function predicts from given features. Combines transform and predict. """
-    predicts = model.predict(features)
-    return predicts
-
-
-def model_score(predicts: np.ndarray, target: pd.Series) -> Dict[str, float]:
-    """Function counting classification score. """
-    return {
-        'f1_score': f1_score(target, predicts),
-        'roc_auc_score': roc_auc_score(target, predicts),
-    }
-
-
 def export_model(model: object, output: str) -> str:
+    """Function exports model pipeline to serialized file. """
     with open(output, 'wb') as output_file:
         joblib.dump(model, output_file)
     return output

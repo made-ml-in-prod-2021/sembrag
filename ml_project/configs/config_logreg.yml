@@ -1,0 +1,28 @@
+data_file_params:
+  path: "ml_project\\data\\raw\\heart.csv"
+  sep: ","
+split_params:
+  test_size: 0.3
+feature_params:
+  numerical_features:
+    - "age"
+    - "sex"
+    - "cp"
+    - "trestbps"
+    - "chol"
+    - "restecg"
+    - "thalach"
+    - "exang"
+    - "oldpeak"
+    - "slope"
+    - "ca"
+    - "thal"
+  target_col: "target"
+  num_impute_strategy: "median"
+  features_to_drop:
+    - "fbs"
+  scale_features: False
+model_params:
+  model_type: "LogisticRegression"
+output_model_path: "ml_project\\models\\logreg_model_out.pkl"
+metric_path: "ml_project\\models\\logreg_metric.json"
