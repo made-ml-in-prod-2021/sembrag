@@ -1,5 +1,6 @@
 from typing import Dict, Union
 
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -7,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import roc_auc_score, f1_score
 from sklearn.pipeline import Pipeline
-import joblib
 
 from src.config.model_config import ModelParams
 
@@ -34,26 +34,21 @@ def create_model_pipeline(
     return Pipeline([('feature_part', transformer), ('model_part', model)])
 
 
-def predict_model(
-        model: Pipeline, features: pd.DataFrame) -> np.ndarray:
+def predict_model(model: Pipeline, features: pd.DataFrame) -> np.ndarray:
+    """Function predicts from given features. Combines transform and predict. """
     predicts = model.predict(features)
     return predicts
 
 
-def evaluate_model(
-        predicts: np.ndarray, target: pd.Series, use_log_trick: bool = False
-) -> Dict[str, float]:
-    if use_log_trick:
-        target = np.exp(target)
+def model_score(predicts: np.ndarray, target: pd.Series) -> Dict[str, float]:
+    """Function counting classification score. """
     return {
-        "r2_score": r2_score(target, predicts),
-        "rmse": mean_squared_error(target, predicts, squared=False),
-        "mae": mean_absolute_error(target, predicts),
+        'f1_score': f1_score(target, predicts),
+        'roc_auc_score': roc_auc_score(target, predicts),
     }
 
 
-
-def serialize_model(model: object, output: str) -> str:
-    with open(output, "wb") as f:
-        pickle.dump(model, f)
+def export_model(model: object, output: str) -> str:
+    with open(output, 'wb') as output_file:
+        joblib.dump(model, output_file)
     return output

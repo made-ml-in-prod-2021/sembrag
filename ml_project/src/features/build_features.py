@@ -54,7 +54,14 @@ def build_transformer(params: FeatureParams) -> ColumnTransformer:
 def process_features(data: pd.DataFrame, transformer: ColumnTransformer,
                      params: FeatureParams) -> pd.DataFrame:
     """Function that processes data with transformer. """
-    transformed_data = pd.DataFrame(transformer.transform(data))
+    col_names = data.columns
+    if 'categorical' in transformer.named_transformers_:
+        ohe_columns = transformer.named_transformers_['categorical'].named_steps[
+            'OHE'].get_feature_names()
+        col_names = col_names.drop(params.categorical_features)
+        col_names = col_names.to_list()
+        col_names.extend(ohe_columns.tolist())
+    transformed_data = pd.DataFrame(transformer.transform(data), columns=col_names)
     return transformed_data
 
 

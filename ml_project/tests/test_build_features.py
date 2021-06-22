@@ -178,6 +178,7 @@ def test_process_features(raw_cat_data: pd.DataFrame):
     params = FeatureParams(numerical_features=num_columns, target_col=target_name,
                            categorical_features=cat_columns)
     transformer = build_transformer(params)
+    raw_cat_data.drop(target_name, axis=1, inplace=True)
     transformer.fit(raw_cat_data)
     transformed_data = process_features(raw_cat_data, transformer, params)
     assert type(transformed_data) == pd.DataFrame, (
