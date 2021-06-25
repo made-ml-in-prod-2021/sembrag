@@ -81,10 +81,22 @@ services:
     image: airflow-predict
     restart: "no"
 
-  download:
+  generate:
     build:
-      context: images/airflow-download
-    image: airflow-download
+      context: images/airflow-generate
+    image: airflow-generate
+    restart: "no"
+
+  train:
+    build:
+      context: images/airflow-train
+    image: airflow-train
+    restart: "no"
+
+  val:
+    build:
+      context: images/airflow-val
+    image: airflow-val
     restart: "no"
 
   preprocess:
