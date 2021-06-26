@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.utils.dates import days_ago
 
-DATA_FOLDER = '/home/smf/PycharmProjects/sembrag_hw3/airflow_ml_dags/data'
+DATA_FOLDER = '/home/smf/hw3/data'
 
 default_args = {
     'owner': 'airflow',
@@ -24,6 +24,5 @@ with DAG(
         command='/data/raw/{{ ds }}',
         task_id='docker-airflow-generate',
         do_xcom_push=False,
-        # !!! HOST folder(NOT IN CONTAINER) replace with yours !!!
         volumes=[f'{DATA_FOLDER}:/data']
     )

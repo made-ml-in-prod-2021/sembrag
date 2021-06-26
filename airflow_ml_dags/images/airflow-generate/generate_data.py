@@ -26,8 +26,8 @@ def raw_num_data() -> Tuple[pd.DataFrame, pd.Series]:
 def generate_data(output_dir: str):
     data, target = raw_num_data()
     os.makedirs(output_dir, exist_ok=True)
-    data.to_csv(os.path.join(output_dir, 'data.csv'))
-    target.to_csv(os.path.join(output_dir, 'target.csv'))
+    data.to_csv(os.path.join(output_dir, 'data.csv'), index=False)
+    target.to_csv(os.path.join(output_dir, 'target.csv'), index=False)
 
 
 if __name__ == '__main__':

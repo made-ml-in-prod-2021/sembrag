@@ -16,7 +16,8 @@ def predict(input_dir: str, output_dir: str, model_dir: str):
         model = joblib.load(fio)
     predicts = pd.Series(model.predict(data))
     os.makedirs(output_dir, exist_ok=True)
-    predicts.to_csv(os.path.join(output_dir, 'predictions.csv'))
+    predicts.to_csv(os.path.join(output_dir, 'predictions.csv'), index=False)
+
 
 if __name__ == '__main__':
     predict()

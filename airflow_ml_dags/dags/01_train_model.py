@@ -23,10 +23,9 @@ def _wait_for_file(path: str) -> bool:
 with DAG(
         '01_train_model',
         default_args=default_args,
-        schedule_interval='@daily',
+        schedule_interval='@weekly',
         start_date=days_ago(20),
 ) as dag:
-    
     wait = PythonSensor(
         task_id='wait_for_file',
         python_callable=_wait_for_file,

@@ -30,10 +30,10 @@ def preprocess(input_dir: str, output_dir: str):
     processed_data_train = pd.DataFrame(data_process_pipeline.fit_transform(data_train))
     processed_val_data = pd.DataFrame(data_process_pipeline.transform(data_test))
     os.makedirs(output_dir, exist_ok=True)
-    processed_data_train.to_csv(os.path.join(output_dir, 'data.csv'))
-    target_train.to_csv(os.path.join(output_dir, 'target.csv'))
-    processed_val_data.to_csv(os.path.join(output_dir, 'val_data.csv'))
-    target_test.to_csv(os.path.join(output_dir, 'val_target.csv'))
+    processed_data_train.to_csv(os.path.join(output_dir, 'data.csv'), index=False)
+    target_train.to_csv(os.path.join(output_dir, 'target.csv'), index=False)
+    processed_val_data.to_csv(os.path.join(output_dir, 'val_data.csv'), index=False)
+    target_test.to_csv(os.path.join(output_dir, 'val_target.csv'), index=False)
 
 
 if __name__ == '__main__':
