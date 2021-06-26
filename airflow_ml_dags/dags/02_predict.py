@@ -11,7 +11,8 @@ DATA_FOLDER = '/home/smf/hw3/data'
 
 default_args = {
     'owner': 'airflow',
-    'email': ['airflow@example.com'],
+    'email': ['sabraganets@gmail.com'],
+    'email_on_failure' : True,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
