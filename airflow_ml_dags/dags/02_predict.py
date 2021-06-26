@@ -18,7 +18,6 @@ default_args = {
 
 
 def _wait_for_file(path: str) -> bool:
-    print('!!!!!!!!#########', path)
     return os.path.exists(path)
 
 
